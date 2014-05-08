@@ -1,0 +1,36 @@
+h1, h2, h3, h4, h5 {
+    font-family: 'Roboto Slab', serif;
+}
+
+.text {
+  max-width: 800px;
+}
+
+body {
+  margin: 10px 50px;
+}
+.header {
+  text-align:center;
+}
+#results {
+  text-align: left;
+}
+.predicted-results, .actual-results{
+  float: left;
+  margin-right: 50px;
+}
+.predicted-results .correct {
+  color: green;
+  font-weight: bold;
+}
+.predicted-results .wrong {
+  color: red;
+  font-weight: bold;
+}
+.predicted-results span {
+  font-style: italic;
+  font-weight: bold;
+}
+.predicted-results span img {
+  height: 10px;
+}
