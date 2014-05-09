@@ -186,7 +186,8 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
     videos.map(function(video){
       var nettoLikes = video.likes - (video.dislikes * 0.5);
       var nettoLikesPrView = nettoLikes / video.views;
-      video.score = video.views * nettoLikesPrView;
+      var likesPrView = video.likes / video.views;
+      video.score = video.views * likesPrView;
       return video;
     });
 
