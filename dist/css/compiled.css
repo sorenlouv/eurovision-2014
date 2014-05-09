@@ -1,0 +1,37 @@
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: 'Roboto Slab', serif;
+}
+.mobile .section.header .results {
+  margin-left: 0;
+}
+.section.header .headline,
+.section.header .sub-headline {
+  text-align: center;
+}
+.section.header .results {
+  display: flex;
+  margin-left: 25%;
+}
+.section.header .results .result {
+  flex: 1;
+  min-width: 200px;
+}
+.section.header .loading-videos {
+  height: 100px;
+  text-align: center;
+}
+.section.header .loading-videos img {
+  position: absolute;
+}
+.section.header .indicate-next-page {
+  height: 100px;
+  text-align: center;
+}
+.section.header .indicate-next-page .arrow-next-page {
+  vertical-align: middle;
+  height: 32px;
+}

@@ -4,78 +4,117 @@
     <meta charset="utf-8">
     <title>Eurovision Predictor</title>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/3.2.2/stylesheets/foundation.min.css">
-    <link href="css/main.css" rel="stylesheet">
+    <link href="dist/css/eurovision.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="dist/fullPage.js/jquery.fullPage.css" />
   </head>
-  <body>
-    <div class="header">
-      <h1>Eurovision Predictions</h1>
-      <h4>Predicting the winner of Eurovision 2014 by analyzing YouTube data</h4>
+  <body display-break-points="{0:'mobile', 480:'tablet', 1024:'desktop'}" ng-controller="AppCtrl">
 
-      <div id="results">
-        <a name="results"></a>
-        <div class="predicted-results">
-          <h5>Predicted results</h5>
-          <ol>
-            <li>Armenia</li>
-            <li>Montenegro</li>
-            <li>Spain</li>
-            <li>Hungary</li>
-            <li>Netherlands</li>
-            <li>Italy</li>
-            <li>Greece</li>
-            <li>Sweden</li>
-            <li>Austria</li>
-            <li>Finland</li>
-          </ol>
+    <div id="fullpage">
+      <!-- First page: results -->
+      <div class="section header">
+        <h1 class="headline">Eurovision Predictions</h1>
+        <h4 class="sub-headline">Predicting the winner of Eurovision 2014 by analyzing YouTube data</h4>
+
+        <div class="results">
+          <div class="result-predicted result">
+            <h5>Predicted results</h5>
+            <ol>
+              <li>Armenia</li>
+              <li>Montenegro</li>
+              <li>Spain</li>
+              <li>Austria</li>
+              <li>Netherlands</li>
+              <li>Hungary</li>
+              <li>Italy</li>
+              <li>Azerbaijan</li>
+              <li>Sweden</li>
+              <li>United Kingdom</li>
+            </ol>
+          </div>
+
+          <div class="result-actual result">
+            <h5>Actual results</h5>
+            <ol>
+              <li>?</li>
+              <li>?</li>
+              <li>?</li>
+              <li>?</li>
+              <li>?</li>
+              <li>?</li>
+              <li>?</li>
+              <li>?</li>
+              <li>?</li>
+              <li>?</li>
+            </ol>
+          </div>
         </div>
 
-        <div class="actual-results">
-          <h5>Actual results</h5>
-          <ol>
-            <li>To be announced</li>
-            <li>To be announced</li>
-            <li>To be announced</li>
-            <li>To be announced</li>
-            <li>To be announced</li>
-            <li>To be announced</li>
-            <li>To be announced</li>
-            <li>To be announced</li>
-            <li>To be announced</li>
-            <li>To be announced</li>
-          </ol>
+        <!-- Videos are loading -->
+        <div class="loading-videos" ng-show="loadingVideos">
+          <img src="http://www.beverlytire.com/lib/widgets/relaypipe/assets/loading_spinner.gif" height="50" width="50">
+        </div>
+
+        <!-- Videos could not load -->
+        <div ng-show="loadingVideosError" data-alert class="alert-box secondary">
+          The statistics could not be loaded. Try to refresh your browser.
+        </div>
+
+        <!-- Videos have loaded -->
+        <div
+          ng-show="!loadingVideos && !loadingVideosError"
+          class="indicate-next-page">
+          <div class="alert-box secondary">
+            <a href="#chart-by-score">View the statistics below <img src="img/arrow-down.png" class="arrow-next-page"></a>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="clear"></div>
 
-    <div ng-controller="AppCtrl">
-      <img ng-show="loadingVideos" src="http://shop.wbstudiotour.co.uk/images/ajax_loader56.gif.pagespeed.ce.qQ5zfQXr-o.gif" height="200" width="200">
-      <div ng-show="loadingVideosError" data-alert class="alert-box secondary">
-        The statistics could not be loaded. Try to refresh your browser.
+      <!-- Section 2: Chart by Score -->
+      <div class="section chart-by-score">
+        <chart value="chartByScore" type="column" height="400"></chart>
       </div>
-      <div>
-          <chart value="chartByScore" type="column" height="400"></chart>
-          <chart value="chartByLikes" type="column" height="400"></chart>
-          <chart value="chartByViews" type="column" height="400"></chart>
-          <chart value="chartByComments" type="column" height="400"></chart>
+
+      <!-- Section 3: Chart by Likes -->
+      <div class="section chart-by-likes">
+        <chart value="chartByLikes" type="column" height="400"></chart>
       </div>
-    </div>
 
+      <!-- Section 4: Chart by Views -->
+      <div class="section chart-by-views">
+        <chart value="chartByViews" type="column" height="400"></chart>
+      </div>
 
-    <h4>The author behind</h4>
-    <div class="text">
+      <!-- Section 5: Chart by Comments -->
+      <div class="section chart-by-comments">
+        <chart value="chartByComments" type="column" height="400"></chart>
+      </div>
+
+      <!-- Section 6: About -->
+      <div class="section about">
+        <h4>The author behind</h4>
         <p>I am a 26-year old tech-happy, entrepreneur from Copenhagen. My name is Søren Louv-Jansen, or @sqren, depending on the context. Find me on <a href="https://twitter.com/sqrendk" target="_blank">Twitter</a>, <a href="https://github.com/sqren" target="_blank">GitHub</a>, <a href="https://www.facebook.com/sorenlouv" target="_blank">Facebook</a>, <a href="http://dk.linkedin.com/in/sorenlouv/" target="_blank">LinkedIn</a>.</p>
 
         <p>Co-founder of <a href="http://konscript.com" target="_blank">Konscript</a>, developer at <a href="http://www.tradeshift.com" target="_blank">Tradeshift</a> and entrepreneur.</p>
+      </div>
     </div>
 
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="dist/fullPage.js/vendors/jquery.easings.min.js"></script>
+    <script type="text/javascript" src="dist/fullPage.js/jquery.fullPage.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+      $('#fullpage').fullpage({
+        anchors: ['header', 'chart-by-score','chart-by-likes','chart-by-views','chart-by-comments'],
+        css3: true,
+        scrollingSpeed: 400
+      });
+    });
+    </script>
+
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highcharts/4.0.1/adapters/standalone-framework.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highcharts/4.0.1/highcharts.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/services/video.js"></script>
-    <script src="js/directives/highchart.js"></script>
+    <script src="dist/js/eurovision.js"></script>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

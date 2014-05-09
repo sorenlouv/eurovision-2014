@@ -1,0 +1,19 @@
+{
+  "name": "eurovision",
+  "description": "Eurovision Predictr",
+  "repository": "http://github.com/sqren/eurovision-2014",
+  "version": "0.1.0",
+  "devDependencies": {
+    "grunt": "^0.4.1",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-csslint": "^0.2.0",
+    "grunt-contrib-less": "^0.11.0",
+    "grunt-contrib-concat": "^0.4.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-uglify": "^0.4.0",
+    "grunt-autoprefixer": "^0.7.3",
+    "grunt-contrib-cssmin": "^0.9.0",
+    "jit-grunt": "^0.5.0"
+  }
+}

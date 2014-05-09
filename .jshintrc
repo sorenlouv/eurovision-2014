@@ -1,0 +1,11 @@
+{
+    "unused": false,
+    "quotmark": "single",
+    "es3": true,
+    "debug": true,
+    "globals": {
+        "angular": true,
+        "Highcharts": true,
+        "app": true
+    }
+}

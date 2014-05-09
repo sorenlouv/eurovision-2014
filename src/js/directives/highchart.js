@@ -1,6 +1,5 @@
-'use strict';
-
 app.directive('chart', function() {
+  'use strict';
   return {
     restrict: 'E',
     template: '<div></div>',

@@ -1,3 +1,115 @@
+var app = angular.module('eurovision', []);
+
+app.controller('AppCtrl', ['$scope', 'videoService', function ($scope, videoService) {
+  'use strict';
+  $scope.loadingVideos = true;
+  $scope.loadingVideosError = false;
+
+  // when all videos have loaded
+  var videosPromise = videoService.getVideos();
+  videosPromise.then(function(videoResponses){
+    var videos = videoService.parseResponses(videoResponses);
+
+    $scope.loadingVideos = false;
+
+    $scope.chartByScore = videoService.getChartByScore(videos);
+    $scope.chartByViews = videoService.getChartByViews(videos);
+    $scope.chartByLikes = videoService.getChartByLikes(videos);
+    $scope.chartByComments = videoService.getChartByComments(videos);
+
+  },function(){
+    $scope.loadingVideos = false;
+    $scope.loadingVideosError = true;
+  });
+
+}]);
+
+app.directive('displayBreakPoints', [
+  '$window',
+  '$rootScope',
+  function($window, $rootScope) {
+    'use strict';
+
+    return {
+      restrict: 'A',
+      link: function(scope, element, attr) {
+        scope.breakpoint = {
+          'class': '',
+          windowSize: $window.innerWidth
+        }; // Initialise Values
+
+        var breakpoints = (scope.$eval(attr.displayBreakPoints));
+        var firstTime = true;
+
+        angular.element($window).bind('resize', setWindowSize);
+
+        scope.$watch('breakpoint.windowSize', function(windowWidth, oldValue) {
+          setClass(windowWidth);
+        });
+
+        scope.$watch('breakpoint.class', function(newClass, oldClass) {
+          if (newClass != oldClass || firstTime) {
+            firstTime = false;
+          }
+        });
+
+        function setWindowSize() {
+          scope.breakpoint.windowSize = $window.innerWidth;
+          if (!scope.$$phase) scope.$apply();
+        }
+
+        function setClass(windowWidth) {
+          var breakpointClass = breakpoints[Object.keys(breakpoints)[0]];
+          for (var breakpoint in breakpoints) {
+            if (breakpoints.hasOwnProperty(breakpoint)) {
+              if (breakpoint < windowWidth) breakpointClass = breakpoints[breakpoint];
+              element.removeClass(breakpoints[breakpoint]);
+            }
+          }
+          element.addClass(breakpointClass);
+          scope.breakpoint['class'] = breakpointClass;
+
+          if (!scope.$$phase) scope.$apply();
+        }
+      }
+    };
+  }
+]);
+
+app.directive('chart', function() {
+  'use strict';
+  return {
+    restrict: 'E',
+    template: '<div></div>',
+    scope: {
+      chartData: '=value',
+      chartObj: '=?'
+    },
+    transclude: true,
+    replace: true,
+    link: function($scope, $element, $attrs) {
+      var chartsDefaults = {
+        chart: {
+          renderTo: $element[0],
+          type: $attrs.type || null,
+          height: $attrs.height || null,
+          width: $attrs.width || null
+        }
+      };
+
+      //Update when charts data changes
+      $scope.$watch('chartData', function(value) {
+        if (!value) return;
+
+        var newSettings = {};
+        angular.extend(newSettings, chartsDefaults, $scope.chartData);
+        new Highcharts.Chart(newSettings);
+      });
+    }
+  };
+
+});
+
 app.factory('videoService', ['$q', '$http', function($q, $http){
   'use strict';
 
@@ -73,8 +185,8 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
   var getChartByScore = function(videos) {
     videos.map(function(video){
       var nettoLikes = video.likes - (video.dislikes * 0.5);
-      var likesPrView = video.likes / video.views;
-      video.score = nettoLikes * likesPrView;
+      var nettoLikesPrView = nettoLikes / video.views;
+      video.score = video.views * nettoLikesPrView;
       return video;
     });
 
