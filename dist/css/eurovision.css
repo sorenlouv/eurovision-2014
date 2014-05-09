@@ -41,3 +41,9 @@ h5 {
   vertical-align: middle;
   height: 32px;
 }
+.section.about {
+  padding: 0 20%;
+}
+.mobile .section.about {
+  padding: 0 5%;
+}
