@@ -1,6 +1,22 @@
 app.factory('videoService', ['$q', '$http', function($q, $http){
   'use strict';
 
+  var totals = {
+    views: 0,
+    likes: 0,
+    dislikes: 0,
+    comments: 0
+  };
+
+  var setTotals = function(videos){
+    videos.map(function(video){
+      totals.views += video.views;
+      totals.likes += video.likes;
+      totals.dislikes += video.dislikes;
+      totals.comments += video.comments;
+    });
+  };
+
   var getFormattedVideos = function(videos) {
     var formattedVideos = {
       countries: [],
@@ -75,7 +91,14 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
       var nettoLikes = video.likes - (video.dislikes * 0.5);
       var nettoLikesPrView = nettoLikes / video.views;
       var likesPrView = video.likes / video.views;
-      video.score = video.views * likesPrView;
+
+      // Share
+      var viewsShare = video.views / totals.views;
+      var likesShare = video.likes / totals.likes;
+      var dislikesShare = video.dislikes / totals.dislikes;
+      var commentsShare = video.comments / totals.comments;
+
+      video.score = likesShare * viewsShare;
       return video;
     });
 
@@ -91,7 +114,7 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
     var chart = {
       type: 'column',
       title: {
-        text: 'Secret Eurovision Score'
+        text: 'Fancy Eurovision Score'
       },
       subtitle: {
           text: 'Ordered by "Eurovision Score"'
@@ -345,6 +368,8 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
     }
   ];
 
+  // countries = countries.slice(0,2);
+
   var getVideos = function() {
     var videoPromises = [];
 
@@ -390,6 +415,7 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
 
 
   return {
+    setTotals: setTotals,
     getVideos: getVideos,
     parseResponses: parseResponses,
     getChartByViews: getChartByViews,

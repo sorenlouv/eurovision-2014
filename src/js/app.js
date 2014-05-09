@@ -9,6 +9,7 @@ app.controller('AppCtrl', ['$scope', 'videoService', function ($scope, videoServ
   var videosPromise = videoService.getVideos();
   videosPromise.then(function(videoResponses){
     var videos = videoService.parseResponses(videoResponses);
+    videoService.setTotals(videos);
 
     $scope.loadingVideos = false;
 
