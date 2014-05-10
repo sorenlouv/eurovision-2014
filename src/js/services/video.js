@@ -132,7 +132,7 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
     var chart = {
       type: 'column',
       title: {
-        text: 'Fancy Eurovision Score'
+        text: 'Fancy Eurovision Score (live updating)'
       },
       subtitle: {
           text: 'Ordered by "Eurovision Score"'
@@ -233,7 +233,7 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
     var chart = {
       type: 'column',
       title: {
-        text: 'Comments'
+        text: 'Comments (live updating)'
       },
       subtitle: {
           text: 'Ordered by comments'
