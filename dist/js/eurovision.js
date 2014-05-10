@@ -13,6 +13,8 @@ app.controller('AppCtrl', ['$scope', 'videoService', function ($scope, videoServ
 
     $scope.loadingVideos = false;
 
+    $scope.top10 = videoService.getTop10(videos);
+
     $scope.chartByScore = videoService.getChartByScore(videos);
     $scope.chartByViews = videoService.getChartByViews(videos);
     $scope.chartByLikes = videoService.getChartByLikes(videos);
@@ -199,7 +201,7 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
     return chart;
   };
 
-  var getChartByScore = function(videos) {
+  var getScore = function(videos) {
     videos.map(function(video){
       var nettoLikes = video.likes - (video.dislikes * 0.5);
       var nettoLikesPrView = nettoLikes / video.views;
@@ -215,7 +217,25 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
       return video;
     });
 
-    // sort by likes
+    return videos;
+  };
+
+  var getTop10 = function(videos){
+    videos = getScore(videos);
+
+    // sort by score
+    sortVideosBy('score', videos);
+
+    // Limit to top 10
+    videos = videos.slice(0,10);
+
+    return videos;
+  };
+
+  var getChartByScore = function(videos) {
+    videos = getScore(videos);
+
+    // sort by score
     sortVideosBy('score', videos);
 
     // Limit to top 15
@@ -481,7 +501,7 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
     }
   ];
 
-  // countries = countries.slice(0,2);
+  // countries = countries.slice(0,10);
 
   var getVideos = function() {
     var videoPromises = [];
@@ -528,6 +548,7 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
 
 
   return {
+    getTop10: getTop10,
     setTotals: setTotals,
     getVideos: getVideos,
     parseResponses: parseResponses,

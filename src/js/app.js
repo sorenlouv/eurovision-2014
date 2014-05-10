@@ -13,6 +13,8 @@ app.controller('AppCtrl', ['$scope', 'videoService', function ($scope, videoServ
 
     $scope.loadingVideos = false;
 
+    $scope.top10 = videoService.getTop10(videos);
+
     $scope.chartByScore = videoService.getChartByScore(videos);
     $scope.chartByViews = videoService.getChartByViews(videos);
     $scope.chartByLikes = videoService.getChartByLikes(videos);

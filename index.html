@@ -25,16 +25,7 @@
           <div class="result-predicted result">
             <h5>Predicted results</h5>
             <ol>
-              <li>Armenia</li>
-              <li>Austria</li>
-              <li>Azerbaijan</li>
-              <li>Montenegro</li>
-              <li>Poland</li>
-              <li>Spain</li>
-              <li>Italy</li>
-              <li>Netherland</li>
-              <li>Ukraine</li>
-              <li>Russia</li>
+              <li ng-repeat="video in top10" ng-bind="video.country"></li>
             </ol>
           </div>
 
