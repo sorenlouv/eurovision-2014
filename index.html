@@ -16,7 +16,7 @@
   <body display-break-points="{0:'mobile', 480:'tablet', 1024:'desktop'}" ng-controller="AppCtrl">
 
     <div id="fullpage">
-      <!-- First page: results -->
+      <!-- Section 1: results -->
       <div class="section header">
         <h1 class="headline">Eurovision Predictions</h1>
         <h4 class="sub-headline">Predicting the winner of Eurovision 2014 by analyzing YouTube data</h4>
@@ -80,6 +80,10 @@
         </div>
       </div>
 
+
+      <div class="section chart-by-playcount">
+        <chart value="chartByPlaycount" type="column" height="400"></chart>
+      </div>
       <!-- Section 2: Chart by Score -->
       <div class="section chart-by-score">
         <chart value="chartByScore" type="column" height="400"></chart>
@@ -115,7 +119,7 @@
     <script type="text/javascript">
     $(document).ready(function() {
       $('#fullpage').fullpage({
-        anchors: ['header', 'chart-by-score','chart-by-likes','chart-by-views','chart-by-comments', 'about'],
+        anchors: ['header', 'chart-by-playcount', 'chart-by-score','chart-by-likes','chart-by-views','chart-by-comments', 'about'],
         css3: true,
         scrollingSpeed: 400
       });

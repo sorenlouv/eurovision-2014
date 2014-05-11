@@ -1,24 +1,35 @@
 var app = angular.module('eurovision', []);
 
-app.controller('AppCtrl', ['$scope', 'videoService', function ($scope, videoService) {
+app.controller('AppCtrl', [
+  '$scope',
+  'youtubeService',
+  'lastfmService',
+  function ($scope, youtubeService, lastfmService) {
   'use strict';
   $scope.loadingVideos = true;
   $scope.loadingVideosError = false;
 
-  // when all videos have loaded
-  var videosPromise = videoService.getVideos();
-  videosPromise.then(function(videoResponses){
-    var videos = videoService.parseResponses(videoResponses);
-    videoService.setTotals(videos);
+  // When last.fm songs have loaded
+  lastfmService.getSongs().then(function(responses){
+    var songs = lastfmService.parseResponses(responses);
+    $scope.chartByPlaycount = lastfmService.getChartByPlaycount(songs);
+
+    $scope.loadingVideos = false;
+  });
+
+  // when youtube videos have loaded
+  youtubeService.getVideos().then(function(responses){
+    var videos = youtubeService.parseResponses(responses);
+    youtubeService.setTotals(videos);
 
     $scope.loadingVideos = false;
 
-    $scope.top10 = videoService.getTop10(videos);
+    $scope.top10 = youtubeService.getTop10(videos);
 
-    $scope.chartByScore = videoService.getChartByScore(videos);
-    $scope.chartByViews = videoService.getChartByViews(videos);
-    $scope.chartByLikes = videoService.getChartByLikes(videos);
-    $scope.chartByComments = videoService.getChartByComments(videos);
+    $scope.chartByScore = youtubeService.getChartByScore(videos);
+    $scope.chartByViews = youtubeService.getChartByViews(videos);
+    $scope.chartByLikes = youtubeService.getChartByLikes(videos);
+    $scope.chartByComments = youtubeService.getChartByComments(videos);
 
   },function(){
     $scope.loadingVideos = false;

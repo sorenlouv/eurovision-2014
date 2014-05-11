@@ -6,6 +6,7 @@
     "globals": {
         "angular": true,
         "Highcharts": true,
-        "app": true
+        "app": true,
+        "console": true
     }
 }

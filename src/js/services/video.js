@@ -1,4 +1,9 @@
-app.factory('videoService', ['$q', '$http', function($q, $http){
+app.factory('youtubeService', [
+  '$q',
+  '$http',
+  'countriesService',
+  'helpersService',
+  function($q, $http, countriesService, helpersService){
   'use strict';
 
   var totals = {
@@ -42,15 +47,10 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
     return formattedVideos;
   };
 
-  var sortVideosBy = function(column, videos) {
-    videos.sort(function(x,y) {
-      return y[column] - x[column];
-    });
-  };
 
   var getChartByViews = function(videos) {
     // Sort by views
-    sortVideosBy('views', videos);
+    helpersService.sortBy('views', videos);
 
     // Limit to top 15
     videos = videos.slice(0,15);
@@ -109,7 +109,7 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
     videos = getScore(videos);
 
     // sort by score
-    sortVideosBy('score', videos);
+    helpersService.sortBy('score', videos);
 
     // Limit to top 10
     videos = videos.slice(0,10);
@@ -121,7 +121,7 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
     videos = getScore(videos);
 
     // sort by score
-    sortVideosBy('score', videos);
+    helpersService.sortBy('score', videos);
 
     // Limit to top 15
     videos = videos.slice(0,15);
@@ -139,12 +139,6 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
       },
       yAxis: [{
         min: 0,
-        labels: {
-          format: '',
-          style: {
-            color: Highcharts.getOptions().colors[1]
-          }
-        },
         title: {
           text: 'Number of Likes'
         }
@@ -179,7 +173,7 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
 
   var getChartByLikes = function(videos) {
     // sort by likes
-    sortVideosBy('likes', videos);
+    helpersService.sortBy('likes', videos);
 
     // Limit to top 15
     videos = videos.slice(0,15);
@@ -222,7 +216,7 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
 
   var getChartByComments = function(videos) {
     // sort by comments
-    sortVideosBy('comments', videos);
+    helpersService.sortBy('comments', videos);
 
     // Limit to top 15
     videos = videos.slice(0,15);
@@ -259,143 +253,14 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
     return chart;
   };
 
-  var countries = [
-    {
-      country: 'Sweden',
-      video: 'XdXXnX5BvGY'
-    },
-    {
-      country: 'Armenia',
-      video: 'ChkJpnOgIwQ'
-    },
-    {
-      country: 'United Kingdom',
-      video: 'fFqYbibLh8k'
-    },
-    {
-      country: 'Hungary',
-      video: 'QzfRDZmuFUI'
-    },
-    {
-      country: 'Ukraine',
-      video: 'sdAf2EjhRiE'
-    },
-    {
-      country: 'Netherlands',
-      video: 'hkrF8uC92O4'
-    },
-    {
-      country: 'Denmark',
-      video: 'fn8DzOcpQas'
-    },
-    {
-      country: 'Austria',
-      video: 'ToqNa0rqUtY'
-    },
-    {
-      country: 'Norway',
-      video: '2LBOjxBty8U'
-    },
-    {
-      country: 'Azerbaijan',
-      video: 'ipQswujA5gw'
-    },
-    {
-      country: 'Israel',
-      video: '_uB4JMw4ctc'
-    },
-    {
-      country: 'Spain',
-      video: 'P9R96ZoWJBU'
-    },
-    {
-      country: 'Greece',
-      video: 'z8QIbL9i2MU'
-    },
-    {
-      country: 'Finland',
-      video: 'a-NSVFBKU-4'
-    },
-    {
-      country: 'Russia',
-      video: 'MPI7AnD_QS8'
-    },
-    {
-      country: 'Romania',
-      video: 'RYfyMkwTLPg'
-    },
-    {
-      country: 'Malta',
-      video: 'Qxi5C-lGX2Y'
-    },
-    {
-      country: 'Italy',
-      video: 'Si9K0ChHzDI'
-    },
-    {
-      country: 'Ireland',
-      video: 'Zc14AzCXUgQ'
-    },
-    {
-      country: 'Germany',
-      video: 'mTC-4YO_5eE'
-    },
-    {
-      country: 'Poland',
-      video: 'syMhJMmGEIc'
-    },
-    {
-      country: 'France',
-      video: 'hWJFfnHNOWI'
-    },
-    {
-      country: 'Montenegro',
-      video: 'Xym7CQFFTOU'
-    },
-    {
-      country: 'Switzerland',
-      video: 'kjWG0oNpWog'
-    },
-    {
-      country: 'Iceland',
-      video: 'TwfGKEIn5xw'
-    },
-    {
-      country: 'San Marino',
-      video: 'vt_3yms1PcM'
-    },
-    {
-      country: 'Lithuania',
-      video: 'PWi0zF6bFto'
-    },
-    {
-      country: 'Slovenia',
-      video: 'ZMpNkCOMaGU'
-    },
-    {
-      country: 'Belarus',
-      video: '0Qe7YmYgowM'
-    },
-    {
-      country: 'Macedonia',
-      video: 'ak73KTgy9nE'
-    },
-    {
-      country: 'Georgia',
-      video: 'o9ixkdkbieU'
-    }
-  ];
-
-  // countries = countries.slice(0,10);
-
   var getVideos = function() {
     var videoPromises = [];
 
     // load videos
-    angular.forEach(countries, function(videoObject){
+    angular.forEach(countriesService.countries, function(country){
       var videoPromise = $http({
         method: 'JSONP',
-        url: 'https://gdata.youtube.com/feeds/api/videos/' + videoObject.video + '?&v=2&alt=json-in-script&callback=JSON_CALLBACK&fields=yt:rating,yt:statistics,gd:comments(gd:feedLink(@countHint)),title'
+        url: 'https://gdata.youtube.com/feeds/api/videos/' + country.video + '?&v=2&alt=json-in-script&callback=JSON_CALLBACK&fields=yt:rating,yt:statistics,gd:comments(gd:feedLink(@countHint)),title'
       });
 
       videoPromises.push(videoPromise);
@@ -408,7 +273,7 @@ app.factory('videoService', ['$q', '$http', function($q, $http){
     var videos = [];
 
     angular.forEach(responses, function(response, i){
-      var country = countries[i].country;
+      var country = countriesService.countries[i].name;
       var title = response.data.entry.title.$t;
       var views = parseInt(response.data.entry.yt$statistics.viewCount, 10);
       var comments = response.data.entry.gd$comments ? parseInt(response.data.entry.gd$comments.gd$feedLink.countHint, 10) : 0;
